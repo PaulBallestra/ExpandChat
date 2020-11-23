@@ -1,0 +1,17 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-2
+        a.navbar-brand(href='/chat') ExpandChat
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle naviguation')
+                span.navbar-toggler-icon
+        .navbar-collapse.collapse(id='navbarSupportedContent')
+                ul.navbar-nav.mr-auto
+                        li.nav-item(class=(page==='index' ? 'active' : ''))
+                                a.nav-link(href='/') Accueil
+                        li.nav-item(class=(page==='chat' ? 'active' : ''))
+                                a.nav-link(href='/chat') Chat
+                ul.navbar-nav.float-right
+                        li.nav-item(class=(page==='admin' ? 'active' : ''))
+                                a.nav-link(href='/admin') Admin
+                        li.nav-item.mr-2(class=(page==='signin' ? 'active' : ''))
+                                a.nav-link(href='/signin') Sign In
+                        li.nav-item(class=(page==='signup' ? 'active' : ''))
+                                a.nav-link(href='/signup', class='btnBorderWhited') Sign Up
