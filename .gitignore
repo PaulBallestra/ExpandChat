@@ -46,3 +46,4 @@ _ReSharper*/
 ~$*
 
 node_modules/
+.idea/
