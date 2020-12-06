@@ -14,11 +14,11 @@ html
                     th(scope='col') Pseudo
                     th(scope='col') Email
             tbody
-                tr
-                    th(scope='col') 1
-                    th(scope='col') usernameUsER7846
-                    th(scope='col') emaileuzfhgizgf@gmail.com
-                tr
-                    th(scope='col') 2
-                    th(scope='col') XxizejfifoixX12354
-                    th(scope='col') eifjzoifzjef@gmail.com
+                each user in users
+                    tr
+                        th(scope='col')
+                            = user.id
+                        th(scope='col')
+                            = user.username
+                        th(scope='col')
+                            = user.email

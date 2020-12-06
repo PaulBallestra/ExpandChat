@@ -32,11 +32,9 @@ app.get('/signup', (req, res) => {
 //SignUp (POST)
 app.post('/signup', urlencoderParser, async (req, res) => {
 
-    console.log('ntm')
+    console.log('eriefeoirhf{')
 
     try{
-
-
 
         console.log('POST/signup -> req.body.username:', req.body.username)
         console.log('POST/signup -> req.body.email:', req.body.email)
@@ -101,7 +99,7 @@ app.get('/admin', async (req, res) => {
     }catch (error){
         console.log(error)
         app.locals.page = 'admin'
-        res.status(500).render('500.pug') //Affichage de la view de l'admin
+        res.status(500).render('500.pug') //Affichage de l'erreur
     }
 
 
