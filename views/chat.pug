@@ -7,4 +7,7 @@ html
     body
         include nav.pug
         h1 ExpandChat
+        if (alert)
+            div(class=(alert.success ? 'alert alert-success' : 'alert alert-danger'))
+                .text-center=alert.message
         p.text-center Ici s'affichera le contenu du chat lorsque nous aurons les capacités pour le faire

@@ -8,6 +8,11 @@ html
         include nav.pug
         h1.mb-4 Sign In
         h4.text-center.mt-3.mb-3 Connectez vous !
+
+        if (alert)
+            div(class=(alert.success ? 'alert alert-success' : 'alert alert-danger'))
+                .text-center=alert.message
+
         form(action="/signin", method="post").d-flex.flex-column.m-auto.w-75.justify-content-center
             div.d-flex.flex-column.mt-2.mb-2
                 label.m-0 Pseudonyme*

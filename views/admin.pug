@@ -13,6 +13,8 @@ html
                     th(scope='col') #
                     th(scope='col') Pseudo
                     th(scope='col') Email
+                    th(scope='col') Modifier
+                    th(scope='col') Supprimer
             tbody
                 each user in users
                     tr
@@ -22,3 +24,8 @@ html
                             = user.username
                         th(scope='col')
                             = user.email
+                        th(scope='col')
+                            a.btn.btn-warning(href="/admin/" + user.id) Modifier
+                        th(scope='col')
+                            a.btn.btn-danger(href="/delete/" + user.id) Supprimer
+

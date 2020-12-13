@@ -8,13 +8,18 @@ html
         include nav.pug
         h1.mb-4 Sign Up
         h4.text-center.mt-3.mb-3 Inscrivez vous pour participer au chat !
+
+        if (alert)
+            div(class=(alert.success ? 'alert alert-success' : 'alert alert-danger'))
+                .text-center=alert.message
+
         form(action="/signup", method="post").d-flex.flex-column.m-auto.w-75.justify-content-center
             div.d-flex.flex-column.mt-2.mb-2
                 label.m-0 Pseudonyme*
-                input(type="text" name="username" placeholder="PseudoAleatoire666" required=true)
+                input(type="text" name="username" placeholder="PseudoAleatoire666" value=(saved ? (saved.username ? saved.username : '') : '') required=true)
             div.d-flex.flex-column.mt-2.mb-2
                 label.m-0 Email*
-                input(type="email" name="email" placeholder="email@email.com" required=true)
+                input(type="email" name="email" placeholder="email@email.com" value=(saved ? (saved.email ? saved.email : '') : '') required=true)
             div.d-flex.flex-column.mt-2.mb2
                 label.m-0 Mot de passe*
                 input(type="password" name="password" placeholder="********" required=true)

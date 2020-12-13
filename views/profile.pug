@@ -1,0 +1,28 @@
+html
+    head
+        title Profile
+        meta(charset='utf-8')
+        link(rel="stylesheet", href="../css/bootstrap.min.css")
+        link(rel="stylesheet", href="../css/style.css")
+    body
+        include nav.pug
+        h1.mb-4 Votre profil
+        h4.text-center.mt-3.mb-3 Modifiez votre profil à votre guise !
+
+        if (alert)
+            div(class=(alert.success ? 'alert alert-success' : 'alert alert-danger'))
+                .text-center=alert.message
+
+        form(action="/admin/" + user.id, method="post").d-flex.flex-column.m-auto.w-75.justify-content-center
+            div.d-flex.flex-column.mt-2.mb-2
+                label.m-0 Pseudonyme*
+                input(type="text" name="username" placeholder="PseudoAleatoire666" value=user.username required=true)
+            div.d-flex.flex-column.mt-2.mb-2
+                label.m-0 Email*
+                input(type="email" name="email" placeholder="email@email.com" value=user.email required=true)
+            div.d-flex.flex-column.mt-2.mb2
+                label.m-0 Mot de passe*
+                input(type="password" name="password" placeholder="********")
+            p.text-center.mt-2.mb-2 * : Champs obligatoires.
+            input(type="submit", value="Valider").btn.btn-primary.mt-3.mb-3.w-auto.ml-auto.mr-auto
+            a.btn.btn-danger.mt-3.mb-3.w-auto.ml-auto.mr-auto(href="/delete/" + userId) Supprimer

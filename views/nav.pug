@@ -9,9 +9,17 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.mb-2
                         li.nav-item(class=(page==='chat' ? 'active' : ''))
                                 a.nav-link(href='/chat') Chat
                 ul.navbar-nav.float-right
-                        li.nav-item(class=(page==='admin' ? 'active' : ''))
-                                a.nav-link(href='/admin') Admin
-                        li.nav-item.mr-2(class=(page==='signin' ? 'active' : ''))
-                                a.nav-link(href='/signin') Sign In
-                        li.nav-item(class=(page==='signup' ? 'active' : ''))
-                                a.nav-link(href='/signup', class='btnBorderWhited') Sign Up
+                        if isConnected
+                                li.nav-item(class=(page==='admin' ? 'active' : ''))
+                                        if (isConnected && !user.isAdmin)
+                                                a.nav-link(href='/admin/' + user.id) Profile
+                                        else
+                                                a.nav-link(href='/admin') Admin
+                        if (!isConnected)
+                                li.nav-item.mr-2(class=(page==='signin' ? 'active' : ''))
+                                        a.nav-link(href='/signin') Sign In
+                                li.nav-item(class=(page==='signup' ? 'active' : ''))
+                                        a.nav-link(href='/signup', class='btnBorderWhited') Sign Up
+                        else
+                                li.nav-item
+                                        a.nav-link(href='/logout', class='btnBorderWhited') Log Out
