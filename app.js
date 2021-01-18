@@ -29,6 +29,8 @@ app.locals.isConnected = false
 //SERVEUR SE LANCERA SUR LE PORT 3000
 const port = 3000;
 
+
+//cimmmentei
 app.use(
     session({
         secret: 'unephrasetressecrete',
