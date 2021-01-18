@@ -27,7 +27,7 @@ app.set('view engine', './views')
 app.locals.isConnected = false
 
 //SERVEUR SE LANCERA SUR LE PORT 3000
-const port = 3000
+const port = 3000;
 
 app.use(
     session({
