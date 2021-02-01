@@ -4,12 +4,11 @@ const express = require('express')
 const helmet = require('helmet')
 const bodyParser = require('body-parser')
 
-
 const urlencoderParser = bodyParser.urlencoded({extended: false}) //pour récupèrer des formulaire html
 
 //Import table USER
-const {User} = require('./models')
-const {Op} = require('sequelize') //Operateur pour les futures requetes
+const { User } = require('./models')
+const { Op } = require('sequelize') //Operateur pour les futures requetes
 
 //Chargement de PassportJS
 const passport = require('passport')
@@ -26,8 +25,9 @@ app.set('view engine', './views')
 
 app.locals.isConnected = false
 
-//SERVEUR SE LANCERA SUR LE PORT 3000
-const port = 3000;
+
+//SERVEUR SE LANCERA SUR LE PORT 4002
+const port = 4002; //PORT POUVANT ETRE UTILISES - 4000 à 4009
 
 
 //cimmmentei
