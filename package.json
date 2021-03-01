@@ -14,14 +14,15 @@
     "passport-local": "^1.0.0",
     "pug": "^3.0.0",
     "sequelize": "^6.3.5",
+    "socket.io": "^3.0.3",
     "sqlite3": "^5.0.0"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app",
-    "dev": "nodemon app",
-    "prod": "pm2 start app.js --watch --name my-app"
+    "dev": "APP_PORT=4001 nodemon app --ignore database.sqlite3",
+    "prod": "NODE_ENV=production APP_PORT=4002 pm2 start app.js --watch --name WidderChat"
   },
   "keywords": [],
   "author": "",

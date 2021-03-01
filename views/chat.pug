@@ -4,6 +4,8 @@ html
         meta(charset='utf-8')
         link(rel="stylesheet", href="../css/bootstrap.min.css")
         link(rel="stylesheet", href="../css/style.css")
+        script(src="../js/chat.js" defer)
+        script(src="../socket.io/socket.io.js")
     body
         include nav.pug
         h1 ExpandChat
@@ -11,3 +13,8 @@ html
             div(class=(alert.success ? 'alert alert-success' : 'alert alert-danger'))
                 .text-center=alert.message
         p.text-center Ici s'affichera le contenu du chat lorsque nous aurons les capacités pour le faire
+        div.d-flex.flex-column.w-75
+            p Message
+        div.d-flex.flex-row.justify-content-center
+            input.w-75(placeholder="Écrivez votre message")
+            button.btn.btn-primary.ml-2 Envoyer

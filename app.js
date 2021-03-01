@@ -1,33 +1,37 @@
 'use strict';
 
-const express = require('express')
-const helmet = require('helmet')
-const bodyParser = require('body-parser')
+const express = require('express');
+const helmet = require('helmet');
+const bodyParser = require('body-parser');
 
-const urlencoderParser = bodyParser.urlencoded({extended: false}) //pour récupèrer des formulaire html
+const urlencoderParser = bodyParser.urlencoded({extended: false});//pour récupèrer des formulaire html
 
 //Import table USER
-const { User } = require('./models')
-const { Op } = require('sequelize') //Operateur pour les futures requetes
+const { User } = require('./models');
+const { Op } = require('sequelize'); //Operateur pour les futures requetes
 
 //Chargement de PassportJS
-const passport = require('passport')
-const session = require('express-session')
-const LocalStrategy = require('passport-local').Strategy
+const passport = require('passport');
+const session = require('express-session');
+const LocalStrategy = require('passport-local').Strategy;
 
-const {emailRegex, usernameRegex, passwordRegex} = require('./helpers/regex')
+const {emailRegex, usernameRegex, passwordRegex} = require('./helpers/regex');
 
-const app = express()
-app.use(helmet())
-app.use(express.static('public'))
+const app = express();
+const http = require('http').createServer(app); //Création serveur en http
+const io = require('socket.io')(http)
 
-app.set('view engine', './views')
+app.use(helmet());
+app.use(express.static('public'));
 
-app.locals.isConnected = false
+app.set('view engine', './views');
+
+app.locals.isConnected = false;
 
 
 //SERVEUR SE LANCERA SUR LE PORT 4002
-const port = 4002; //PORT POUVANT ETRE UTILISES - 4000 à 4009
+//const port = 4002; //PORTS POUVANT ETRE UTILISES - 4000 à 4009
+const port = process.env.APP_PORT ? process.env.APP_PORT : 4002; //PORTS POUVANT ETRE UTILISES - 4000 à 4009
 
 
 //cimmmentei
@@ -37,18 +41,18 @@ app.use(
         resave: false,
         saveUninitialized: false
     })
-)
+);
 
-app.use(passport.initialize())
-app.use(passport.session())
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.serializeUser((user, done) => {
     done(null, user)
-})
+});
 
 passport.deserializeUser((user, done) => {
     done(null, user)
-})
+});
 
 //Stratégie
 passport.use(
@@ -58,17 +62,17 @@ passport.use(
 
                 const user = await User.findOne({
                     where: {username}
-                })
+                });
 
                 //vérification si l'user existe + si sont mdp est le bon si il existe
                 if(!user || (user.password !== password))
                     return done(null, false, {
                         success: false,
                         message: 'Mauvais identifiants'
-                    })
+                    });
 
-                app.locals.user = user
-                app.locals.isConnected = true
+                app.locals.user = user;
+                app.locals.isConnected = true;
                 return done(null, user)
 
             }catch(error){
@@ -76,38 +80,38 @@ passport.use(
             }
         }
     )
-)
+);
 
-
+//ROUTES
 //Racine du serveur
 app.get('/', (req, res) => {
     app.locals.page = 'index'
     res.status(200).render('index.pug')
-})
+});
 
 //SignUp (GET)
 app.get('/signup', (req, res) => {
     app.locals.page = 'signup'
     res.status(200).render('signup.pug') //Affichage de la view du signup
-})
+});
 
 //Log Out
 app.get('/logout', (req, res) => {
-    req.logout()
-    app.locals.isConnected = false
+    req.logout();
+    app.locals.isConnected = false;
     res.redirect('/')
-})
+});
 
 //SignUp (POST)
 app.post('/signup', urlencoderParser, async (req, res) => {
 
     try{
 
-        console.log('POST/signup -> req.body.username:', req.body.username)
-        console.log('POST/signup -> req.body.email:', req.body.email)
-        console.log('POST/signup -> req.body.password:', req.body.password)
+        console.log('POST/signup -> req.body.username:', req.body.username);
+        console.log('POST/signup -> req.body.email:', req.body.email);
+        console.log('POST/signup -> req.body.password:', req.body.password);
 
-        const {email, password, username} = req.body
+        const {email, password, username} = req.body;
 
         //Vérification que l'email de l'user est conforme à l'expression régulière
         if(!email.match(emailRegex)){
@@ -159,7 +163,7 @@ app.post('/signup', urlencoderParser, async (req, res) => {
                     password,
                     isAdmin: false
                 }
-        })
+        });
 
         if(!created){
 
@@ -183,20 +187,20 @@ app.post('/signup', urlencoderParser, async (req, res) => {
         console.log('Error POST/signup : ', error)
         res.status(500).render('500.pug')
     }
-})
+});
 
 //CONNEXION
 //SignIn (GET)
 app.get('/signin', (req, res) => {
     app.locals.page = 'signin'
     res.status(200).render('signin.pug') //Affichage de la view du signin
-})
+});
 
 //SignIn (POST)
 app.post('/signin', urlencoderParser, passport.authenticate('local', {
     successRedirect: '/chat',
     failureRedirect: '/signin'
-}))
+}));
 
 //CHAT
 //Chat (GET)
@@ -204,26 +208,29 @@ app.get('/chat', (req, res) => {
 
     //si il n'est pas connecté on le renvoit vers la page de connexion
     if(!app.locals.isConnected){
-        app.locals.page = 'signin'
+        app.locals.page = 'signin';
         res.status(200).render('signin.pug', {
             alert: {
                 success: false,
                 message: 'Vous devez vous connecter avant de pouvoir aller sur cet onglet.'
             }
-        })
+        });
 
     }
 
-    app.locals.page = 'chat'
+    app.locals.page = 'chat';
 
     res.status(200).render('chat.pug', {
         alert: {
             success: true,
             message: 'Vous êtes connecté !'
         }
-    })
+    });
 
-})
+    //TEST SOCKETS
+
+
+});
 
 //PROFILE
 app.get('/admin/:userId', async (req, res) => {
@@ -244,7 +251,7 @@ app.get('/admin/:userId', async (req, res) => {
         })
     }
 
-})
+});
 
 //Si il a lancé l'update, on vérifie ce qu'il a mit
 app.post('/admin/:userId', urlencoderParser, async (req, res) => {
@@ -273,10 +280,10 @@ app.post('/admin/:userId', urlencoderParser, async (req, res) => {
     }
 
     //Si les test sont passés, on l'insére en base de donnée
-    const user = await User.findByPk(userId)
+    const user = await User.findByPk(userId);
 
-    user.username = username
-    user.email = email
+    user.username = username;
+    user.email = email;
 
     //Si il ne touche pas au mdp on ne le modifie pas
     if(password !== ''){
@@ -298,7 +305,6 @@ app.post('/admin/:userId', urlencoderParser, async (req, res) => {
         user.password = password
     }
 
-
     await user.save() //maj
 
     res.status(200).render('profile.pug', {
@@ -308,7 +314,7 @@ app.post('/admin/:userId', urlencoderParser, async (req, res) => {
         }
     }) //retour sur la page de signup avec des paramètres
 
-})
+});
 
 
 //Admin (GET)
@@ -352,7 +358,7 @@ app.get('/admin', async (req, res) => {
     }
 
 
-})
+});
 
 //DELETE
 app.get('/delete/:userId', async(req, res) => {
@@ -372,8 +378,16 @@ app.get('/delete/:userId', async(req, res) => {
         }
     })
 
-})
+});
 
-app.listen(port, () =>
+//SOCKETS
+io.on('connection', (socket) => {
+    console.log('someone is connected')
+    socket.emit('chat', 'Bienvenue sur le chat')
+    socket.broadcast('chat')
+});
+
+
+http.listen(port, () =>
     console.log(`le serveur express est lancé sur le port ${port}`)
-)
+);
